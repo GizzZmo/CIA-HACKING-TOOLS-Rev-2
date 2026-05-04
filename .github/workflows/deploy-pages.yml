@@ -27,10 +27,21 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Prepare site
+        run: |
+          rm -rf site
+          mkdir -p site
+          rsync -a --delete \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude 'localhost:6081' \
+            --exclude 'site/' \
+            ./ site/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "./site"
 
       - name: Deploy to GitHub Pages
         id: deployment
